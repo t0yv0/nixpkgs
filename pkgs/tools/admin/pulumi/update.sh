@@ -5,29 +5,37 @@
 # https://www.pulumi.com/docs/get-started/install/versions/
 VERSION="2.23.1"
 
+function lastRel() {
+    NAME="$1"
+    curl --silent https://github.com/pulumi/pulumi-$NAME/releases |
+	grep -o 'v\d\+\.\d\+\.\d\+' |
+	head -n 1 |
+	sed s/v//
+}
+
 # Grab latest release ${VERSION} from
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
-    "auth0=1.8.1"
-    "aws=3.32.0"
-    "cloudflare=2.13.1"
-    "consul=2.8.1"
-    "datadog=2.16.1"
-    "digitalocean=3.5.1"
-    "docker=2.8.1"
-    "gcp=4.12.0"
-    "github=3.2.0"
-    "gitlab=3.7.0"
-    "hcloud=0.6.2"
-    "kubernetes=2.8.3"
+    "auth0=$(lastRel auth0)"
+    "aws=$(lastRel aws)"
+    "cloudflare=$(lastRel cloudflare)"
+    "consul=$(lastRel consul)"
+    "datadog=$(lastRel datadog)"
+    "digitalocean=$(lastRel digitalocean)"
+    "docker=$(lastRel docker)"
+    "gcp=$(lastRel gcp)"
+    "github=$(lastRel github)"
+    "gitlab=$(lastRel gitlab)"
+    "hcloud=$(lastRel hcloud)"
+    "kubernetes=$(lastRel kubernetes)"
     "mailgun=2.4.1"
-    "mysql=2.4.1"
-    "openstack=2.15.0"
-    "packet=3.2.2"
-    "postgresql=2.7.2"
-    "random=3.1.0"
-    "vault=3.4.1"
-    "vsphere=2.12.2"
+    "mysql=$(lastRel mysql)"
+    "openstack=$(lastRel openstack)"
+    "packet=$(lastRel packet)"
+    "postgresql=$(lastRel postgresql)"
+    "random=$(lastRel random)"
+    "vault=$(lastRel vault)"
+    "vsphere=$(lastRel vsphere)"
 )
 
 function genMainSrc() {
