@@ -6,7 +6,7 @@
     x86_64-linux = [
       {
         url = "https://get.pulumi.com/releases/sdk/pulumi-v2.23.1-linux-x64.tar.gz";
-        sha256 = "0m5rbsvpwy6bnv59lhqyd77lm4ghf74y48zrc0jn0gh8navzpbk3";
+        sha256 = "0fx523n0a6bkl52qm5b56d1px6hb5sbcw3735k2qvkkz1afi46xk";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-auth0-v1.9.0-linux-amd64.tar.gz";
