@@ -15,7 +15,6 @@ plugins=(
     "azuread=3.6.0"
     "cloudflare=2.15.0"
     "consul=2.10.0"
-    "eks=0.23.0"
     "datadog=2.18.0"
     "digitalocean=3.8.0"
     "docker=2.10.0"

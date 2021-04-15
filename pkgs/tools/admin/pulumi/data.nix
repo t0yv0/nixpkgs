@@ -37,10 +37,6 @@
         sha256 = "1a01b7bswyvxf2bxwmpikah2pkar6k955djfk2cdv4r6wlgf66kk";
       }
       {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-eks-v0.23.0-linux-amd64.tar.gz";
-        sha256 = "1a69mf2jnq8d2f195cg7ssyrfyn61fsmy2i7vcjgvvh5v4fsk9wx";
-      }
-      {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v2.18.0-linux-amd64.tar.gz";
         sha256 = "0rm3zxani9fxv6cnkxh98l2xlswnax3ybk4ablmc7pa33w4ac5h4";
       }
@@ -141,10 +137,6 @@
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-consul-v2.10.0-darwin-amd64.tar.gz";
         sha256 = "003fqx9qbrsj7pvpzprwdgisk2wh5whcd6jcbwjaqpf2a4fhhnv4";
-      }
-      {
-        url = "https://api.pulumi.com/releases/plugins/pulumi-resource-eks-v0.23.0-darwin-amd64.tar.gz";
-        sha256 = "1v285gyq1k18wgfcryw7gmlgqxj1rkcsqdny8maxfbmjp3s5grd9";
       }
       {
         url = "https://api.pulumi.com/releases/plugins/pulumi-resource-datadog-v2.18.0-darwin-amd64.tar.gz";
