@@ -9,7 +9,7 @@ VERSION="3.4.0"
 # https://github.com/pulumi/pulumi-${NAME}/releases
 plugins=(
     "auth0=2.2.0"
-    "aws=4.7.0"
+    "aws=4.8.0"
     "cloudflare=3.1.0"
     "consul=3.2.0"
     "datadog=3.3.0"
