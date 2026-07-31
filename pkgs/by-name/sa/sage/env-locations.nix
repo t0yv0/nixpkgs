@@ -3,6 +3,7 @@
   pari_data,
   pari,
   singular,
+  singularInfo,
   maxima,
   graphs,
   elliptic_curves,
@@ -27,6 +28,7 @@ writeTextFile rec {
     export SINGULARPATH='${singular}/share/singular'
     export SINGULAR_SO='${singular}/lib/libSingular.so'
     export SINGULAR_EXECUTABLE='${singular}/bin/Singular'
+    export SINGULAR_INFO_FILE='${singularInfo}/share/info/singular.info'
     export MAXIMA_FAS='${maxima}/lib/maxima/${maxima.version}/binary-ecl/maxima.fas'
     export MAXIMA_PREFIX="${maxima}"
     export GRAPHS_DATA_DIR='${graphs}/share/graphs'

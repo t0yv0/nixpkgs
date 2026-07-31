@@ -64,7 +64,7 @@ let
   # the files its looking fore are located. Also see `sage-env`.
   env-locations = callPackage ./env-locations.nix {
     inherit pari_data;
-    inherit singular maxima;
+    inherit singular singularInfo maxima;
     inherit three;
     cysignals = python3.pkgs.cysignals;
     mathjax = mathjax;
@@ -144,6 +144,13 @@ let
     }; # make the libs accessible
 
   singular = pkgs.singular.override { inherit flint; };
+
+  # Singular's info file is disabled by default on aarch64-darwin, but Sage's
+  # doctests and help resource lookup still expect it to exist.
+  singularInfo = pkgs.singular.override {
+    inherit flint;
+    enableDocs = true;
+  };
 
   maxima = pkgs.maxima-ecl.override {
     lisp-compiler = pkgs.ecl.override {

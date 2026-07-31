@@ -66,9 +66,32 @@ Hypothesis:
   - the doctest assumes upstream filesystem conventions that do not exactly match the Nix-packaged Singular layout
   - the resource exists, but the lookup path is not propagated into the doctest subprocess in the way Sage expects
 
+Focused repro and root cause:
+
+- the new `repro.nix` target reproduces this in about three seconds with just `src/sage/libs/singular/singular.pyx`
+- `get_resource('D')` works and returns the packaged `share` directory, but `get_resource('i')` returns `None` and Singular prints:
+  - either set `SINGULAR_INFO_FILE`
+  - or make sure `singular.info` exists at `.../share/info/singular.info`
+- inspecting `pkgs/by-name/si/singular/package.nix` showed the actual root cause: on `aarch64-darwin`, `enableDocs` defaults to `false`
+- that matters because the Singular package only installs `share/info/singular.info` when docs are enabled
+- we confirmed the package layout mismatch directly:
+  - Sage's wrapped environment had `SINGULARPATH`, but no `SINGULAR_INFO_FILE`
+  - the packaged Singular used by Sage had no `share/info` directory at all
+  - a docs-enabled `singular.override { enableDocs = true; }` build succeeds locally and does contain `share/info/singular.info`
+- we also validated the exact missing input:
+  - setting `SINGULAR_INFO_FILE` to a real `singular.info` file makes the focused `singular.pyx` doctest pass immediately
+  - wiring Sage to export `SINGULAR_INFO_FILE` from a docs-enabled sibling Singular package also makes the focused repro pass
+- so this is not numeric flakiness and not a libSingular logic bug; it is a packaging mismatch where Sage expects a Singular info file that our Darwin build currently omits
+
+Current fix direction:
+
+- keep Sage's main Singular package unchanged for library/runtime use
+- add a docs-enabled sibling Singular derivation just for the info file
+- export `SINGULAR_INFO_FILE` from `pkgs/by-name/sa/sage/env-locations.nix` so Sage's resource lookup sees a valid `singular.info`
+
 Current confidence:
 
-- fairly high that this is packaging/environment-related, not numeric flakiness
+- very high that this is packaging/resource-related, specifically missing `singular.info` on Darwin
 
 # matrix_double_dense.pyx doctest failed
 
