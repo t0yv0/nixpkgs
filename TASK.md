@@ -144,12 +144,29 @@ Hypothesis:
 - `collares` already called this out in <https://github.com/NixOS/nixpkgs/pull/538506#issuecomment-5085550287>: the test comment itself says to increase `n` when hardware or algorithms get faster
 - so the most likely root cause is not a regression in correctness, but that FLINT/Singular is now fast enough on this setup that the 0.5s alarm-based expectation no longer holds
 
+Focused repro and root cause:
+
+- the new `repro.nix` target reproduces this in about twenty seconds with just `src/sage/rings/polynomial/multi_polynomial_libsingular.pyx`
+- with the current upstream parameter `n = 11`, the timed factorization now finishes in about `0.27s`, so the expected `AlarmInterrupt` never fires
+- once those first two expected interrupts do not occur, the still-pending alarm lands later in an unrelated `lift` doctest, which explains the third follow-up failure
+- targeted timing checks show the threshold cleanly:
+  - `n = 11` finishes before the `0.5s` alarm
+  - `n = 12` reliably triggers the `AlarmInterrupt`
+  - larger `n` values also interrupt, but `12` is the smallest change that restores the intended behavior
+- after raising `n` to `12`, the expected factorization output also needs one more factor term (`x^2048 + y^2048`) because the exact polynomial changed accordingly
+
+Current fix direction:
+
+- update that doctest's parameter from `n = 11` to `n = 12`
+- update the expected final factorization output to include the extra `x^2048 + y^2048` factor
+- this keeps the original intent of the test intact: verify interrupt handling and state consistency without depending on outdated performance assumptions
+
 Current confidence:
 
-- very high that this is a timing-sensitive doctest that needs to be updated rather than a real functional bug
+- very high that this is a stale timing-based doctest and that increasing `n` is the right fix
 
 Overall read so far:
 
-- `matrix_double_dense.pyx` and `multi_polynomial_libsingular.pyx` both look like test fragility, not real math failures
-- `singular.pyx` looks like environment/resource wiring
-- `ext_rep.py` is the least understood one and is the strongest candidate for a real Darwin-specific runtime bug
+- `matrix_double_dense.pyx` and `multi_polynomial_libsingular.pyx` were both test fragility and now have focused doctest-only fixes
+- `singular.pyx` was packaging/resource wiring: Sage needed a real `singular.info` file on Darwin
+- `ext_rep.py` was a real Darwin-specific runtime issue in the `urlopen(file://...)` path, fixed by avoiding that path for local files

@@ -92,6 +92,10 @@ stdenv.mkDerivation rec {
     # SVD reconstruction differs by one machine epsilon on Darwin arm64.
     ./patches/matrix-double-dense-svd-tolerance.patch
 
+    # A timing-based factorization doctest now completes before the alarm on
+    # faster Darwin arm64 builds.
+    ./patches/multi-polynomial-libsingular-alarm-threshold.patch
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";
