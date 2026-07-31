@@ -89,6 +89,9 @@ stdenv.mkDerivation rec {
     # file:// URL triggers Python's macOS proxy lookup machinery.
     ./patches/ext-rep-file-url-workaround.patch
 
+    # SVD reconstruction differs by one machine epsilon on Darwin arm64.
+    ./patches/matrix-double-dense-svd-tolerance.patch
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";

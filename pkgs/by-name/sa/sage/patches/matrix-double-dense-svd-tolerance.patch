@@ -1,0 +1,6 @@
+diff --git a/src/sage/matrix/matrix_double_dense.pyx b/src/sage/matrix/matrix_double_dense.pyx
+--- a/src/sage/matrix/matrix_double_dense.pyx
++++ b/src/sage/matrix/matrix_double_dense.pyx
+@@ -1926,1 +1926,1 @@
+-            sage: U*S*V.transpose()  # tol 1e-15
++            sage: U*S*V.transpose()  # tol 3e-15
