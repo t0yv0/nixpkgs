@@ -6,6 +6,8 @@
   makeWrapper,
   files ? null, # "null" means run all tests
   longTests ? true, # run tests marked as "long time" (roughly doubles runtime)
+  nthreads ? null,
+  extraArgs ? "",
   # Run as many tests as possible in approximately n seconds. This will give each
   # file to test a "time budget" and stop tests if it is exceeded. 300 is the
   # upstream default value.
@@ -22,6 +24,8 @@ let
   testArgs = if runAllTests then "--all" else testFileList;
   patienceSpecifier = lib.optionalString longTests "--long";
   timeSpecifier = lib.optionalString (timeLimit != null) "--short ${toString timeLimit}";
+  extraSpecifier = lib.optionalString (extraArgs != "") extraArgs;
+  threadCount = if nthreads == null then ''"$NIX_BUILD_CORES"'' else toString nthreads;
   relpathToArg = relpath: lib.escapeShellArg "${src}/${relpath}"; # paths need to be absolute
   testFileList = lib.concatStringsSep " " (map relpathToArg files);
 in
@@ -66,7 +70,7 @@ stdenv.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/65802
     export GLIBC_TUNABLES=glibc.malloc.arena_max=4
 
-    echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${testArgs}"
-    "sage" -t --timeout=0 --nthreads "$NIX_BUILD_CORES" --optional=sage ${timeSpecifier} ${patienceSpecifier} ${testArgs}
+    echo "Running sage tests with arguments ${timeSpecifier} ${patienceSpecifier} ${extraSpecifier} ${testArgs}"
+    "sage" -t --timeout=0 --nthreads ${threadCount} --optional=sage ${timeSpecifier} ${patienceSpecifier} ${extraSpecifier} ${testArgs}
   '';
 }
