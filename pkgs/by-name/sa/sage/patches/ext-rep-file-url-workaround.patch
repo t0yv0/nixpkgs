@@ -1,0 +1,22 @@
+diff --git a/src/sage/combinat/designs/ext_rep.py b/src/sage/combinat/designs/ext_rep.py
+--- a/src/sage/combinat/designs/ext_rep.py
++++ b/src/sage/combinat/designs/ext_rep.py
+@@ -36,6 +36,7 @@ import gzip
+ import bz2
+ 
+ from urllib.request import urlopen
++from urllib.parse import urlsplit
+ 
+ from sage.misc.temporary_file import tmp_filename
+ 
+@@ -557,2 +558,10 @@ def open_extrep_url(url):
+ 
++    split = urlsplit(url)
++    if split.scheme == 'file':
++        f = open_extrep_file(split.path)
++        try:
++            return f.read()
++        finally:
++            f.close()
++
+     f = urlopen(url)

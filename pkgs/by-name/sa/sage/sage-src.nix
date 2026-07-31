@@ -85,6 +85,10 @@ stdenv.mkDerivation rec {
     # https://github.com/sagemath/sage/issues/42473
     ./patches/lower-sleep2-test-threshold.patch
 
+    # Avoid Darwin Objective-C aborts in forked doctest workers when a local
+    # file:// URL triggers Python's macOS proxy lookup machinery.
+    ./patches/ext-rep-file-url-workaround.patch
+
     # https://github.com/sagemath/sage/pull/42009, landed in 10.10.beta0
     (fetchpatch2 {
       name = "gap-root-paths.patch";
